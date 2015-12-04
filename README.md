@@ -25,4 +25,4 @@
         
 ## Demo
 ![actionsheet](https://github.com/Creolophus/TLAlert/blob/master/actionsheet.png?raw=true)
-
+![alertview](https://github.com/Creolophus/TLAlert/blob/master/alertview.png?raw=true)
