@@ -7,9 +7,10 @@
 
 3.在iOS 8以后的版本中使用UIAlertController
 
-## Demo
-
 ## Usage
+
+将TLAlert导入工程即可
+
         let alert = TLAlertHelper(title: "Alert", message: "message", preferredStyle: .Alert)
         alert.addAction(TLAlertAction(title: "ActionDefault", style: .Default, handler: { (alertAction) in
             print("you press the \(alertAction)")
@@ -21,3 +22,7 @@
             print("you press the \($0)")
         }))
         alert.show(inViewController: self)
+        
+## Demo
+![actionsheet](https://github.com/Creolophus/TLAlert/blob/master/actionsheet.png?raw=true)
+
