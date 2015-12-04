@@ -26,7 +26,7 @@ class ViewController: UIViewController {
         alert.addAction(TLAlertAction(title: "ActionDefault", style: .Default, handler: { (alertAction) in
             print("you press the \(alertAction)")
         }))
-        alert.addAction(TLAlertAction(title: "ActionDefault2", style: .Destructive, handler: { (alertAction) in
+        alert.addAction(TLAlertAction(title: "ActionDefault2", style: .Default, handler: { (alertAction) in
             print("you press the \(alertAction)")
         }))
         alert.addAction(TLAlertAction(title: "ActionCancel", style: .Cancel, handler: {
