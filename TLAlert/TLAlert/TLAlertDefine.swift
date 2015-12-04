@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /**
  enum like UIAlertControllerStyle
@@ -18,6 +19,11 @@ enum TLAlertStyle: Int {
     
     case ActionSheet
     case Alert
+    
+    @available(iOS 8.0, *)
+    func convertToUIAlertControllerStyle() -> UIAlertControllerStyle {
+        return UIAlertControllerStyle(rawValue: self.rawValue)!
+    }
 }
 
 
@@ -33,4 +39,9 @@ enum TLAlertActionStyle : Int {
     case Default
     case Cancel
     case Destructive
+    
+    @available(iOS 8.0, *)
+    func convertToUIAlertActionStyle() -> UIAlertActionStyle {
+        return UIAlertActionStyle(rawValue: self.rawValue)!
+    }
 }

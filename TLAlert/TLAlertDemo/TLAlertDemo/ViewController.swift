@@ -13,7 +13,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        UIAlertView(title: "title", message: "message", delegate: self, cancelButtonTitle: "cancel", otherButtonTitles: "biu1", "biu2", "biu3").show()
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,37 +21,34 @@ class ViewController: UIViewController {
     }
 
     @IBAction func showAlertView(sender: UIButton) {
-        if #available(iOS 8.0, *) {
-            let alert = UIAlertController(title: "title", message: "message", preferredStyle: .Alert)
-            let action1 = UIAlertAction(title: "action1", style: .Default, handler: { (action) -> Void in
-                if let title = action.title {
-                    print(title)
-                }
-            })
-            alert.addAction(action1)
-            alert.addAction(UIAlertAction(title: "action2", style: .Default, handler: nil))
-            alert.addAction(UIAlertAction(title: "cancel", style: .Cancel, handler: nil))
-            if #available(iOS 9.0, *) {
-                alert.preferredAction = action1
-            } else {
-                // Fallback on earlier versions
-            }
-//            navigationController?.pushViewController(alert, animated: true)
-            self.presentViewController(alert, animated: true, completion: { () -> Void in
-                print("ffffff")
-            })
-        } else {
-            // Fallback on earlier versions
-        }
+        
+        let alert = TLAlertHelper(title: "Alert", message: "message", preferredStyle: .Alert)
+        alert.addAction(TLAlertAction(title: "ActionDefault", style: .Default, handler: { (alertAction) in
+            print("you press the \(alertAction)")
+        }))
+        alert.addAction(TLAlertAction(title: "ActionDefault2", style: .Destructive, handler: { (alertAction) in
+            print("you press the \(alertAction)")
+        }))
+        alert.addAction(TLAlertAction(title: "ActionCancel", style: .Cancel, handler: {
+            print("you press the \($0)")
+        }))
+        alert.show(inViewController: self)
     }
 
     @IBAction func ShowActionSheet(sender: AnyObject) {
-    }
-}
-
-
-extension ViewController: UIAlertViewDelegate {
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        print(buttonIndex)
+        let actionSheet = TLAlertHelper(title: "ActionSheet", message: "message", preferredStyle: .ActionSheet)
+        actionSheet.addAction(TLAlertAction(title: "ActionDefault", style: .Default, handler: { (alertAction) -> Void in
+            print("you press the \(alertAction)")
+        }))
+        actionSheet.addAction(TLAlertAction(title: "ActionCancel", style: .Cancel, handler: { (alertAction) -> Void in
+            print("you press the \(alertAction)")
+        }))
+        actionSheet.addAction(TLAlertAction(title: "ActionDefault2", style: .Default, enabled: false) {
+            print("you press the \($0)")
+        })
+        actionSheet.addAction(TLAlertAction(title: "ActionDestructive", style: .Destructive, handler: { (alertAction) -> Void in
+            print("you press the \(alertAction)")
+        }))
+        actionSheet.show(inViewController: self)
     }
 }

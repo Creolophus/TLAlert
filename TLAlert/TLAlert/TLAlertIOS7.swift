@@ -9,16 +9,23 @@
 import UIKit
 
 @available(iOS 7.0, *)
-class TLBlockActionSheet: UIActionSheet, iOS7AlertProtocol {
-    var actions: [TLAlertAction]!
+class TLBlockActionSheet: UIActionSheet, iOS7AlertProtocol, ActionSheetType {
+    var actions: [TLAlertAction] = []
     
-    static func actionSheet(title: String, actions: [TLAlertAction]) -> TLBlockActionSheet {
+    static func actionSheet(title: String?, actions: [TLAlertAction]?) -> TLBlockActionSheet {
+
+        var actionSheet = TLBlockActionSheet()
         
-        var actionSheet = TLBlockActionSheet(title: <#T##String?#>, delegate: <#T##UIActionSheetDelegate?#>, cancelButtonTitle: <#T##String?#>, destructiveButtonTitle: <#T##String?#>)
-        actionSheet.title = title
-        actionSheet.delegate = actionSheet
-        actionSheet.actions = actions
-        actionSheet.configActions()
+        if let title = title {
+            actionSheet.title = title
+        }
+        
+        if let actions = actions {
+            actionSheet.actions = actions
+            actionSheet.configActions()
+            actionSheet.delegate = actionSheet
+        }
+        
         return actionSheet
     }
     
@@ -33,16 +40,40 @@ extension TLBlockActionSheet: UIActionSheetDelegate {
     }
 }
 
-private protocol iOS7AlertProtocol {
+@available(iOS 7.0, *)
+class TLBlockAlertView: UIAlertView, iOS7AlertProtocol {
+    var actions: [TLAlertAction] = []
     
-    var actions: [TLAlertAction]! { get set }
-    var cancelButtonIndex: Int { get set }
-    
-    mutating func configActions()
-    func addButtonWithTitle(title: String?) -> Int // returns index of button. 0 based.
-
+    static func alert(title: String?, actions: [TLAlertAction]?) -> TLBlockAlertView {
+        var alertView = TLBlockAlertView()
+        
+        if let title = title {
+            alertView.title = title
+        }
+        
+        if let actions = actions {
+            alertView.actions = actions
+            alertView.configActions()
+            alertView.delegate = alertView
+        }
+        return alertView
+    }
 }
 
+extension TLBlockAlertView: UIAlertViewDelegate {
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        actions[buttonIndex].handler?(actions[buttonIndex])
+    }
+}
+
+private protocol iOS7AlertProtocol {
+    
+    var actions: [TLAlertAction] { get set }
+    var cancelButtonIndex: Int { get set }
+    
+    func addButtonWithTitle(title: String?) -> Int // returns index of button. 0 based.
+    mutating func configActions()
+}
 
 extension iOS7AlertProtocol {
     mutating func configActions() {
@@ -54,3 +85,22 @@ extension iOS7AlertProtocol {
         }
     }
 }
+
+extension iOS7AlertProtocol where Self: ActionSheetType {
+    mutating func configActions() {
+        for action in actions {
+            addButtonWithTitle(action.title)
+            if action.style == .Cancel {
+                cancelButtonIndex = actions.indexOf(action)!
+            } else if action.style == .Destructive {
+                destructiveButtonIndex = actions.indexOf(action)!
+            }
+        }
+    }
+
+}
+
+private protocol ActionSheetType {
+    var destructiveButtonIndex: Int { get set }
+}
+
